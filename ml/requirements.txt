@@ -1,0 +1,12 @@
+pandas
+numpy
+xgboost
+flask
+joblib
+matplotlib
+seaborn
+python-dotenv
+fastapi
+uvicorn[standard]
+scikit-optimize
+plotly
