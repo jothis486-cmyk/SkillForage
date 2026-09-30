@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import api from '../api/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -9,8 +10,51 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [warmingUp, setWarmingUp] = useState(false);
+  const [warmupDone, setWarmupDone] = useState(false);
+  const [countdown, setCountdown] = useState(30);
+  const countdownRef = useRef(null);
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Ping backend on mount so it wakes up (Render free tier cold start)
+  useEffect(() => {
+    let cancelled = false;
+    const ping = async () => {
+      try {
+        await api.get('/health', { timeout: 8000 });
+        if (!cancelled) setWarmupDone(true);
+      } catch {
+        // Backend sleeping — show warm-up banner and poll until awake
+        if (!cancelled) {
+          setWarmingUp(true);
+          setCountdown(30);
+          countdownRef.current = setInterval(() => {
+            setCountdown(prev => (prev > 0 ? prev - 1 : 0));
+          }, 1000);
+          // Retry every 5s
+          const retry = setInterval(async () => {
+            try {
+              await api.get('/health', { timeout: 8000 });
+              if (!cancelled) {
+                setWarmingUp(false);
+                setWarmupDone(true);
+                clearInterval(retry);
+                clearInterval(countdownRef.current);
+              }
+            } catch { /* still waking up */ }
+          }, 5000);
+          // Auto-clear after 60s
+          setTimeout(() => { if (!cancelled) { clearInterval(retry); setWarmingUp(false); } }, 60000);
+        }
+      }
+    };
+    ping();
+    return () => {
+      cancelled = true;
+      clearInterval(countdownRef.current);
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,9 +64,25 @@ const Login = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err) {
+      const status = err.response?.status;
+      // Auto-retry once if backend was sleeping (502/503/504)
+      if (status === 502 || status === 503 || status === 504) {
+        setError('⏳ Backend is waking up — retrying in 10 seconds...');
+        setTimeout(async () => {
+          try {
+            await login(email, password);
+            navigate('/dashboard');
+          } catch (retryErr) {
+            setError(retryErr.message || 'Login failed. Please try again.');
+          } finally {
+            setLoading(false);
+          }
+        }, 10000);
+        return;
+      }
       setError(err.message || err.response?.data?.message || 'Invalid email or password');
     } finally {
-      setLoading(false);
+      if (loading) setLoading(false);
     }
   };
 
@@ -66,6 +126,10 @@ const Login = () => {
         @keyframes shimmer {
           0% { background-position: -200% 0; }
           100% { background-position: 200% 0; }
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
       `}</style>
 
@@ -179,6 +243,55 @@ const Login = () => {
             Sign in to your AI Career Dashboard
           </p>
         </div>
+
+        {/* Backend warm-up banner */}
+        <AnimatePresence>
+          {warmingUp && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              style={{
+                background: 'rgba(245,158,11,0.12)',
+                border: '1px solid rgba(245,158,11,0.3)',
+                borderRadius: 10,
+                padding: '12px 16px',
+                color: '#fcd34d',
+                fontSize: 13,
+                marginBottom: 16,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+              }}
+            >
+              <span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⚙️</span>
+              <span>
+                <strong>Server is waking up</strong> — ready in ~{countdown}s. You can fill in your details now.
+              </span>
+            </motion.div>
+          )}
+          {warmupDone && !warmingUp && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              style={{
+                background: 'rgba(34,197,94,0.1)',
+                border: '1px solid rgba(34,197,94,0.25)',
+                borderRadius: 10,
+                padding: '10px 16px',
+                color: '#86efac',
+                fontSize: 13,
+                marginBottom: 16,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
+              <span>✅</span> Server is online and ready!
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Error */}
         <AnimatePresence>
