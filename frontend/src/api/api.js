@@ -50,7 +50,7 @@ export const getErrorMessage = (error) => {
       case 502:
       case 503:
       case 504:
-        return 'Backend server is temporarily waking up or unavailable. Please wait 15 seconds and retry.';
+        return serverMessage || 'Backend server is temporarily waking up or unavailable. Please wait 15 seconds and retry.';
       default:
         return serverMessage || `Server returned error (${status}).`;
     }

@@ -96,6 +96,41 @@ app.use('/api/users', userRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/interview', interviewRoutes);
 
+const { memoryUsers } = require('./models/memoryStore');
+
+let mongoLastError = null;
+let isConnecting = false;
+
+const connectDB = async () => {
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+  if (!uri) {
+    mongoLastError = 'MONGODB_URI is not set in environment';
+    return;
+  }
+  if (mongoose.connection.readyState === 1 || isConnecting) return;
+  isConnecting = true;
+  try {
+    await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
+    mongoLastError = null;
+    console.log('✅ MongoDB connected');
+  } catch (err) {
+    mongoLastError = err.message;
+    console.error('❌ MongoDB connection failed:', err.message);
+  } finally {
+    isConnecting = false;
+  }
+};
+
+// Initial connection
+connectDB();
+
+// Retry connection every 15s if disconnected
+setInterval(() => {
+  if (mongoose.connection.readyState !== 1 && (process.env.MONGODB_URI || process.env.MONGO_URI)) {
+    connectDB();
+  }
+}, 15000);
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   const dbState = mongoose.connection.readyState;
@@ -104,11 +139,11 @@ app.get('/health', (req, res) => {
     status: 'OK',
     message: 'SkillForge AI Backend is running',
     database: dbStatus,
-    mongoConfigured: !!( process.env.MONGODB_URI || process.env.MONGO_URI ),
+    mongoConfigured: !!(process.env.MONGODB_URI || process.env.MONGO_URI),
+    mongoError: mongoLastError,
+    memoryStoreReady: memoryUsers.size > 0,
     timestamp: new Date().toISOString()
   });
-});
-
 // Root route
 app.get('/', (req, res) => {
   res.send('AI Skill Gap Detection API is running...');
@@ -126,20 +161,6 @@ app.use((err, req, res, next) => {
       : (err.message || 'Server error')
   });
 });
-
-// ─── Database Connection ──────────────────────────────────────────────────────
-const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
-
-if (!MONGODB_URI) {
-  console.warn('⚠️  MONGODB_URI is not set — database features will be unavailable.');
-  console.warn('    Set MONGODB_URI in your Render environment variables to enable auth.');
-} else {
-  mongoose.connect(MONGODB_URI)
-    .then(() => console.log('✅ MongoDB connected'))
-    .catch(err => {
-      console.error('❌ MongoDB connection failed:', err.message);
-    });
-}
 
 // ─── Start Server ─────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 5000;
