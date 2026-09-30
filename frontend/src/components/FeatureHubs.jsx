@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import api from '../api/api';
 
 // --- FEATURE 6: Industry Skill Tracker ---
 export const IndustrySkillTrackerView = () => (
@@ -50,18 +51,22 @@ export const AIMentorView = () => {
   ]);
   const [input, setInput] = useState('');
 
-  const sendMsg = (txt) => {
+  const sendMsg = async (txt) => {
     const query = txt || input;
     if (!query.trim()) return;
     setMessages(prev => [...prev, { role: 'user', text: query }]);
     setInput('');
 
-    setTimeout(() => {
+    try {
+      const res = await api.post('/api/ai/chat', { message: query });
+      setMessages(prev => [...prev, { role: 'ai', text: res.data.reply }]);
+    } catch {
+      // Fallback to built-in responses if backend unavailable
       let reply = "Based on current hiring trends, focus 70% of your time on building production-ready projects and 30% on LeetCode DSA patterns!";
-      if (query.toLowerCase().includes('learn')) reply = "I recommend learning Full-Stack Web Dev (React + Node.js) combined with AI integration (LangChain / OpenAI API). This stack has the highest hiring growth right now.";
+      if (query.toLowerCase().includes('learn')) reply = "I recommend learning Full-Stack Web Dev (React + Node.js) combined with AI integration. This stack has the highest hiring growth right now.";
       if (query.toLowerCase().includes('ready')) reply = "You are ready for interviews when you can solve LeetCode Medium problems in under 25 minutes and clearly explain your capstone project's system design.";
       setMessages(prev => [...prev, { role: 'ai', text: reply }]);
-    }, 500);
+    }
   };
 
   return (

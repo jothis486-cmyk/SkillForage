@@ -214,7 +214,7 @@ function buildQuestionBank(jobRole, experienceLevel, interviewType, userSkills =
 exports.setupInterview = async (req, res) => {
   try {
     const { jobRole, experienceLevel, interviewType, difficulty } = req.body;
-    const userId = req.user.id;
+    const userId = req.user.userId || req.user.id;
 
     const user = await User.findById(userId);
     const userSkills = user?.technicalSkills || [];
@@ -449,7 +449,8 @@ exports.submitInterview = async (req, res) => {
 // 4. Get Interview History for Candidate
 exports.getInterviewHistory = async (req, res) => {
   try {
-    const interviews = await Interview.find({ userId: req.user.id, status: 'completed' })
+    const userId = req.user.userId || req.user.id;
+    const interviews = await Interview.find({ userId, status: 'completed' })
       .sort({ createdAt: -1 })
       .limit(10);
 

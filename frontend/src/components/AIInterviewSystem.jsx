@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import api from '../api/api';
 
 const JOB_ROLES = [
   'Full-Stack Developer', 'Frontend Developer', 'Backend Developer', 'Data Scientist',
@@ -174,7 +174,7 @@ const AIInterviewSystem = () => {
       const token = localStorage.getItem('token');
       let qs;
       if (token) {
-        const res = await axios.post('/api/interview/setup', config, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await api.post('/api/interview/setup', config);
         qs = res.data.questions;
         setInterviewId(res.data.interviewId);
       } else {
@@ -202,7 +202,7 @@ const AIInterviewSystem = () => {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        const res = await axios.post('/api/interview/run-code', { questionId: qId, code, language: 'javascript', testCases: questions.find(q => q.id === qId)?.testCases }, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await api.post('/api/interview/run-code', { questionId: qId, code, language: 'javascript', testCases: questions.find(q => q.id === qId)?.testCases });
         setCodeResults(prev => ({ ...prev, [qId]: res.data }));
       } else {
         const passed = code.includes('return') && code.length > 60;
@@ -233,7 +233,7 @@ const AIInterviewSystem = () => {
       const token = localStorage.getItem('token');
       let finalScores;
       if (token && interviewId) {
-        const res = await axios.post('/api/interview/submit', { interviewId, answers: answerPayload }, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await api.post('/api/interview/submit', { interviewId, answers: answerPayload });
         finalScores = res.data.interview.scores;
         finalScores.evaluation = res.data.interview.evaluation;
         finalScores.certificateEligible = res.data.interview.certificateEligible;

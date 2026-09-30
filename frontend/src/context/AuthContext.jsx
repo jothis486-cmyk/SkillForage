@@ -1,10 +1,18 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import api, { API_URL, getErrorMessage } from '../api/api';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [token, setToken] = useState(localStorage.getItem('token') || null);
   const [loading, setLoading] = useState(true);
 
@@ -19,56 +27,79 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserProfile = async () => {
     try {
-      const res = await axios.get('/api/users/profile');
+      const res = await api.get('/api/users/profile');
       setUser(res.data);
+      localStorage.setItem('user', JSON.stringify(res.data));
     } catch (err) {
-      console.error(err);
-      logout();
+      console.warn('Could not fetch remote profile:', err.userMessage || err.message);
+      // Only logout if token is explicitly invalid/unauthorized (401)
+      if (err.response?.status === 401) {
+        logout();
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const login = async (email, password) => {
-    const res = await axios.post('/api/auth/login', { email, password });
-    setToken(res.data.token);
-    localStorage.setItem('token', res.data.token);
-    setUser(res.data.user);
+    try {
+      const res = await api.post('/api/auth/login', { email, password });
+      const receivedToken = res.data.token;
+      const receivedUser = res.data.user;
+
+      setToken(receivedToken);
+      localStorage.setItem('token', receivedToken);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${receivedToken}`;
+
+      setUser(receivedUser);
+      localStorage.setItem('user', JSON.stringify(receivedUser));
+      return res.data;
+    } catch (err) {
+      throw new Error(err.userMessage || getErrorMessage(err));
+    }
   };
 
   const register = async (fullName, email, password, collegeName, degree, preferredCareer) => {
-    await axios.post('/api/auth/register', {
-      fullName,
-      email,
-      password,
-      collegeName,
-      degree,
-      preferredCareer
-    });
+    try {
+      const res = await api.post('/api/auth/register', {
+        fullName,
+        email,
+        password,
+        collegeName,
+        degree,
+        preferredCareer
+      });
+      return res.data;
+    } catch (err) {
+      throw new Error(err.userMessage || getErrorMessage(err));
+    }
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     delete axios.defaults.headers.common['Authorization'];
   };
 
   const updateProfile = async (profileData) => {
     try {
-      const res = await axios.put('/api/users/profile', profileData);
+      const res = await api.put('/api/users/profile', profileData);
       setUser(res.data);
+      localStorage.setItem('user', JSON.stringify(res.data));
       return res.data;
     } catch (err) {
-      console.warn('API updateProfile failed, updating local state:', err);
+      console.warn('API updateProfile failed, updating local state:', err.userMessage || err.message);
       const updated = { ...user, ...profileData };
       setUser(updated);
+      localStorage.setItem('user', JSON.stringify(updated));
       return updated;
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateProfile, setUser }}>
+    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateProfile, setUser, API_URL }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import api from '../api/api';
 
 const ProjectDebugger = () => {
   const [code, setCode] = useState(`// Paste or edit your buggy code here
@@ -13,9 +14,20 @@ async function fetchUserData(userId) {
   const [loading, setLoading] = useState(false);
   const [debugResult, setDebugResult] = useState(null);
 
-  const handleRunDebugger = () => {
+  const handleRunDebugger = async () => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await api.post('/api/ai/debug', { code, language });
+      const a = res.data.analysis;
+      setDebugResult({
+        language: a.language || language,
+        errorExplanation: a.errorExplanation,
+        detectedBugs: a.detectedBugs || [],
+        securitySuggestions: a.securitySuggestions || [],
+        performanceImprovements: a.performanceImprovements || [],
+        fixedCode: a.aiFixedCode || '// No fix available'
+      });
+    } catch {
       setDebugResult({
         language,
         errorExplanation: "Missing `await` keyword before `fetch()`. Attempting to access property `.data` directly on an unresolved Promise object.",
@@ -48,8 +60,9 @@ async function fetchUserData(userId) {
   }
 }`
       });
+    } finally {
       setLoading(false);
-    }, 600);
+    }
   };
 
   return (
