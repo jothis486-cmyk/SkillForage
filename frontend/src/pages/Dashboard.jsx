@@ -16,6 +16,7 @@ import PlacementPrep from '../components/PlacementPrep';
 import LiveClassAssessment from '../components/LiveClassAssessment';
 import AIInterviewSystem from '../components/AIInterviewSystem';
 import EditableProfileView from '../components/EditableProfileView';
+import ResumeExampleModal from '../components/ResumeExampleModal';
 import {
   IndustrySkillTrackerView,
   AIMentorView,
@@ -111,6 +112,8 @@ const Dashboard = () => {
     { role: 'ai', text: "Hi! I'm your AI Career Assistant 🤖 Ask me anything about your career path, skills, or interview prep!" }
   ]);
   const [chatInput, setChatInput] = useState('');
+  const [selectedResumeTemplate, setSelectedResumeTemplate] = useState('ATS-Optimized');
+  const [showResumeModal, setShowResumeModal] = useState(false);
 
   const sendChat = () => {
     if (!chatInput.trim()) return;
@@ -749,14 +752,63 @@ const Dashboard = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
-              <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 700, marginBottom: 16 }}>🎨 Resume Templates</h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 700, margin: 0 }}>🎨 Resume Templates</h3>
+                <span style={{ fontSize: 11, color: '#a5b4fc', fontWeight: 600 }}>Touch to view example model</span>
+              </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-                {['Modern', 'Classic', 'Minimal', 'Professional', 'Creative', 'ATS-Optimized'].map((t, i) => (
-                  <div key={i} style={{ background: i === 5 ? 'rgba(99,102,241,0.15)' : 'rgba(255,255,255,0.04)', border: `1px solid ${i === 5 ? 'rgba(99,102,241,0.4)' : 'rgba(255,255,255,0.08)'}`, borderRadius: 12, padding: '16px 10px', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
-                    <div style={{ width: '100%', height: 80, background: 'rgba(255,255,255,0.04)', borderRadius: 8, marginBottom: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24 }}>📄</div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: i === 5 ? '#a5b4fc' : '#94a3b8' }}>{t}</div>
-                  </div>
-                ))}
+                {[
+                  { name: 'Modern', icon: '✨', color: '#6366f1', desc: 'Tech & FAANG' },
+                  { name: 'Classic', icon: '🏛️', color: '#94a3b8', desc: 'Ivy League' },
+                  { name: 'Minimal', icon: '📄', color: '#0ea5e9', desc: 'Ultra-Clean' },
+                  { name: 'Professional', icon: '💼', color: '#3b82f6', desc: 'Corporate' },
+                  { name: 'Creative', icon: '🎨', desc: 'Full-Stack', color: '#ec4899' },
+                  { name: 'ATS-Optimized', icon: '🎯', desc: '99% Pass Rate', color: '#10b981' }
+                ].map((item, i) => {
+                  const isSelected = selectedResumeTemplate === item.name;
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => {
+                        setSelectedResumeTemplate(item.name);
+                        setShowResumeModal(true);
+                      }}
+                      style={{
+                        background: isSelected ? 'rgba(99,102,241,0.18)' : 'rgba(255,255,255,0.04)',
+                        border: `1.5px solid ${isSelected ? item.color : 'rgba(255,255,255,0.08)'}`,
+                        borderRadius: 12,
+                        padding: '14px 8px',
+                        textAlign: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.25s',
+                        position: 'relative',
+                        boxShadow: isSelected ? `0 0 16px ${item.color}33` : 'none'
+                      }}
+                    >
+                      <div style={{
+                        width: '100%',
+                        height: 70,
+                        background: isSelected ? `${item.color}18` : 'rgba(255,255,255,0.04)',
+                        borderRadius: 8,
+                        marginBottom: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 4
+                      }}>
+                        <span style={{ fontSize: 24 }}>{item.icon}</span>
+                        <span style={{ fontSize: 9, color: item.color, fontWeight: 700 }}>PREVIEW</span>
+                      </div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: isSelected ? '#fff' : '#cbd5e1' }}>
+                        {item.name}
+                      </div>
+                      <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>
+                        {item.desc}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
@@ -779,7 +831,12 @@ const Dashboard = () => {
                   </div>
                 </div>
               ))}
-              <button style={{ width: '100%', padding: '12px', marginTop: 16, background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none', borderRadius: 10, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>⬇️ Download Resume PDF</button>
+              <button 
+                onClick={() => setShowResumeModal(true)}
+                style={{ width: '100%', padding: '12px', marginTop: 16, background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none', borderRadius: 10, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Inter, sans-serif', boxShadow: '0 4px 15px rgba(99,102,241,0.3)' }}
+              >
+                ⬇️ Download Resume PDF / View Model
+              </button>
             </div>
           </div>
         </motion.div>
@@ -1318,6 +1375,14 @@ const Dashboard = () => {
           {renderContent()}
         </div>
       </div>
+
+      {/* Interactive Resume Example Modal */}
+      <ResumeExampleModal
+        isOpen={showResumeModal}
+        onClose={() => setShowResumeModal(false)}
+        initialTemplate={selectedResumeTemplate}
+        user={user}
+      />
     </div>
   );
 };
