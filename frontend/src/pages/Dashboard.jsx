@@ -17,6 +17,7 @@ import LiveClassAssessment from '../components/LiveClassAssessment';
 import AIInterviewSystem from '../components/AIInterviewSystem';
 import EditableProfileView from '../components/EditableProfileView';
 import ResumeExampleModal from '../components/ResumeExampleModal';
+import CodingWorkspaceModal from '../components/CodingWorkspaceModal';
 import {
   IndustrySkillTrackerView,
   AIMentorView,
@@ -114,6 +115,8 @@ const Dashboard = () => {
   const [chatInput, setChatInput] = useState('');
   const [selectedResumeTemplate, setSelectedResumeTemplate] = useState('ATS-Optimized');
   const [showResumeModal, setShowResumeModal] = useState(false);
+  const [selectedProblemId, setSelectedProblemId] = useState('two-sum');
+  const [showCodingModal, setShowCodingModal] = useState(false);
 
   const sendChat = () => {
     if (!chatInput.trim()) return;
@@ -1054,7 +1057,7 @@ const Dashboard = () => {
           </div>
 
           <div style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: 16, padding: 20, marginBottom: 20 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
               <div>
                 <span style={{ fontSize: 12, color: '#6366f1', fontWeight: 700 }}>🎯 TODAY'S DAILY CHALLENGE</span>
                 <h3 style={{ fontSize: 16, fontWeight: 700, color: '#fff', marginTop: 4 }}>Two Sum — Find pair with target sum</h3>
@@ -1064,19 +1067,52 @@ const Dashboard = () => {
                   <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, fontWeight: 600, background: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}>Hash Map</span>
                 </div>
               </div>
-              <button style={{ padding: '10px 24px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none', borderRadius: 10, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>Solve Now →</button>
+              <button 
+                onClick={() => {
+                  setSelectedProblemId('two-sum');
+                  setShowCodingModal(true);
+                }}
+                style={{ padding: '10px 24px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none', borderRadius: 10, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Inter, sans-serif', boxShadow: '0 4px 14px rgba(99,102,241,0.3)' }}
+              >
+                Solve Now →
+              </button>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gap: 8 }}>
+          <div style={{ display: 'grid', gap: 10 }}>
             {[
-              { title: 'Reverse Linked List', diff: 'Easy', topic: 'Linked List', solved: true },
-              { title: 'Binary Tree Level Order', diff: 'Medium', topic: 'Trees', solved: true },
-              { title: 'Merge K Sorted Lists', diff: 'Hard', topic: 'Heap', solved: false },
-              { title: 'Longest Substring', diff: 'Medium', topic: 'Sliding Window', solved: false },
-              { title: 'Valid Parentheses', diff: 'Easy', topic: 'Stack', solved: true },
+              { id: 'reverse-linked-list', title: 'Reverse Linked List', diff: 'Easy', topic: 'Linked List', solved: true },
+              { id: 'binary-tree-level-order', title: 'Binary Tree Level Order', diff: 'Medium', topic: 'Trees', solved: true },
+              { id: 'merge-k-sorted-lists', title: 'Merge K Sorted Lists', diff: 'Hard', topic: 'Heap', solved: false },
+              { id: 'longest-substring', title: 'Longest Substring', diff: 'Medium', topic: 'Sliding Window', solved: false },
+              { id: 'valid-parentheses', title: 'Valid Parentheses', diff: 'Easy', topic: 'Stack', solved: true },
             ].map((p, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 10 }}>
+              <div 
+                key={i} 
+                onClick={() => {
+                  setSelectedProblemId(p.id);
+                  setShowCodingModal(true);
+                }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 14,
+                  padding: '14px 18px',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: 12,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(99,102,241,0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(99,102,241,0.3)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)';
+                }}
+              >
                 <span style={{ fontSize: 16 }}>{p.solved ? '✅' : '⬜'}</span>
                 <span style={{ flex: 1, fontSize: 13, fontWeight: 600, color: '#fff' }}>{p.title}</span>
                 <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, fontWeight: 600, background: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}>{p.topic}</span>
@@ -1084,6 +1120,7 @@ const Dashboard = () => {
                   background: p.diff === 'Easy' ? 'rgba(16,185,129,0.15)' : p.diff === 'Medium' ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)',
                   color: p.diff === 'Easy' ? '#6ee7b7' : p.diff === 'Medium' ? '#fcd34d' : '#fca5a5',
                 }}>{p.diff}</span>
+                <span style={{ fontSize: 12, color: '#6366f1', fontWeight: 700, paddingLeft: 8 }}>Solve →</span>
               </div>
             ))}
           </div>
@@ -1382,6 +1419,13 @@ const Dashboard = () => {
         onClose={() => setShowResumeModal(false)}
         initialTemplate={selectedResumeTemplate}
         user={user}
+      />
+
+      {/* Interactive Coding Workspace / IDE Modal */}
+      <CodingWorkspaceModal
+        isOpen={showCodingModal}
+        onClose={() => setShowCodingModal(false)}
+        initialProblemId={selectedProblemId}
       />
     </div>
   );
