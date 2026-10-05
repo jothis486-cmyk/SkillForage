@@ -18,6 +18,7 @@ import AIInterviewSystem from '../components/AIInterviewSystem';
 import EditableProfileView from '../components/EditableProfileView';
 import ResumeExampleModal from '../components/ResumeExampleModal';
 import CodingWorkspaceModal from '../components/CodingWorkspaceModal';
+import JobApplicationModal from '../components/JobApplicationModal';
 import {
   IndustrySkillTrackerView,
   AIMentorView,
@@ -117,6 +118,25 @@ const Dashboard = () => {
   const [showResumeModal, setShowResumeModal] = useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState('two-sum');
   const [showCodingModal, setShowCodingModal] = useState(false);
+  const [selectedJobForApp, setSelectedJobForApp] = useState(null);
+  const [showJobAppModal, setShowJobAppModal] = useState(false);
+  const [jobFilter, setJobFilter] = useState('All');
+  const [appliedJobs, setAppliedJobs] = useState(() => {
+    try {
+      const saved = localStorage.getItem('appliedJobs');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const handleApplySuccess = (jobId) => {
+    setAppliedJobs(prev => {
+      const next = [...new Set([...prev, jobId])];
+      try { localStorage.setItem('appliedJobs', JSON.stringify(next)); } catch (_) {}
+      return next;
+    });
+  };
 
   const sendChat = () => {
     if (!chatInput.trim()) return;
@@ -1127,45 +1147,190 @@ const Dashboard = () => {
         </motion.div>
       );
 
-      case 'jobs': return (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#fff', marginBottom: 6 }}>💼 Jobs & Internships</h1>
-          <p style={{ color: '#64748b', marginBottom: 24, fontSize: 14 }}>AI-matched opportunities from top companies</p>
+      case 'jobs': {
+        const ALL_JOBS = [
+          { id: 'google-swe', company: 'Google', role: 'Software Engineer', salary: '₹18–30 LPA', location: 'Bangalore', type: 'Full-time', match: 92, logo: '🔵', posted: '2d ago' },
+          { id: 'microsoft-fsd', company: 'Microsoft', role: 'Full Stack Developer', salary: '₹15–25 LPA', location: 'Hyderabad', type: 'Full-time', match: 85, logo: '🟦', posted: '3d ago' },
+          { id: 'amazon-sde-intern', company: 'Amazon', role: 'SDE Intern', salary: '₹60K/month', location: 'Remote', type: 'Internship', match: 88, logo: '🟠', posted: '1d ago' },
+          { id: 'adobe-ai-intern', company: 'Adobe', role: 'AI / ML Research Intern', salary: '₹85K/month', location: 'Remote', type: 'Internship', match: 95, logo: '🟣', posted: 'Just now' },
+          { id: 'flipkart-backend', company: 'Flipkart', role: 'Backend Developer', salary: '₹12–20 LPA', location: 'Bangalore', type: 'Full-time', match: 78, logo: '🟡', posted: '5d ago' },
+          { id: 'razorpay-react', company: 'Razorpay', role: 'React Developer', salary: '₹10–18 LPA', location: 'Remote', type: 'Full-time', match: 82, logo: '🔷', posted: '1d ago' },
+          { id: 'swiggy-ds-intern', company: 'Swiggy', role: 'Data Science Intern', salary: '₹50K/month', location: 'Bangalore', type: 'Internship', match: 80, logo: '🟢', posted: '4d ago' },
+          { id: 'cred-mobile-intern', company: 'CRED', role: 'Frontend & Mobile Intern', salary: '₹70K/month', location: 'Remote', type: 'Internship', match: 87, logo: '🔴', posted: '2d ago' },
+          { id: 'oracle-cloud', company: 'Oracle', role: 'Cloud Infrastructure Engineer', salary: '₹16–22 LPA', location: 'Hyderabad', type: 'Full-time', match: 83, logo: '🔶', posted: '3d ago' },
+        ];
 
-          <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-            {['All', 'Jobs', 'Internships', 'Remote', 'On-site'].map(f => (
-              <button key={f} style={{ padding: '7px 16px', background: f === 'All' ? 'rgba(99,102,241,0.2)' : 'rgba(255,255,255,0.04)', border: `1px solid ${f === 'All' ? 'rgba(99,102,241,0.4)' : 'rgba(255,255,255,0.08)'}`, borderRadius: 20, color: f === 'All' ? '#a5b4fc' : '#64748b', fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter, sans-serif' }}>{f}</button>
-            ))}
-          </div>
+        const filteredJobs = ALL_JOBS.filter(j => {
+          if (jobFilter === 'Jobs') return j.type === 'Full-time';
+          if (jobFilter === 'Internships') return j.type === 'Internship';
+          if (jobFilter === 'Remote') return j.location.toLowerCase().includes('remote');
+          if (jobFilter === 'On-site') return !j.location.toLowerCase().includes('remote');
+          return true;
+        });
 
-          <div style={{ display: 'grid', gap: 12 }}>
-            {[
-              { company: 'Google', role: 'Software Engineer', salary: '₹18–30 LPA', location: 'Bangalore', type: 'Full-time', match: 92, logo: '🔵', posted: '2d ago' },
-              { company: 'Microsoft', role: 'Full Stack Developer', salary: '₹15–25 LPA', location: 'Hyderabad', type: 'Full-time', match: 85, logo: '🟦', posted: '3d ago' },
-              { company: 'Amazon', role: 'SDE Intern', salary: '₹60K/month', location: 'Remote', type: 'Internship', match: 88, logo: '🟠', posted: '1d ago' },
-              { company: 'Flipkart', role: 'Backend Developer', salary: '₹12–20 LPA', location: 'Bangalore', type: 'Full-time', match: 78, logo: '🟡', posted: '5d ago' },
-              { company: 'Razorpay', role: 'React Developer', salary: '₹10–18 LPA', location: 'Remote', type: 'Full-time', match: 82, logo: '🔷', posted: '1d ago' },
-            ].map((j, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', transition: 'all 0.2s' }}>
-                <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, flexShrink: 0 }}>{j.logo}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <h4 style={{ fontSize: 14, fontWeight: 700, color: '#fff' }}>{j.role}</h4>
-                    <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, fontWeight: 600, background: j.type === 'Internship' ? 'rgba(6,182,212,0.15)' : 'rgba(16,185,129,0.15)', color: j.type === 'Internship' ? '#67e8f9' : '#6ee7b7' }}>{j.type}</span>
-                  </div>
-                  <div style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>{j.company} · {j.location} · {j.salary} · Posted {j.posted}</div>
+        return (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 6 }}>
+              <div>
+                <h1 style={{ fontSize: 24, fontWeight: 800, color: '#fff', margin: 0 }}>💼 Jobs & Internships for Students</h1>
+                <p style={{ color: '#64748b', margin: '4px 0 0', fontSize: 14 }}>AI-matched campus hiring, internships, and entry-level positions</p>
+              </div>
+              {appliedJobs.length > 0 && (
+                <div style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 20, padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 13 }}>🎉</span>
+                  <span style={{ color: '#6ee7b7', fontSize: 12, fontWeight: 700 }}>{appliedJobs.length} Application{appliedJobs.length > 1 ? 's' : ''} Submitted</span>
                 </div>
-                <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#6366f1' }}>{j.match}%</div>
-                  <div style={{ fontSize: 10, color: '#64748b' }}>AI Match</div>
-                </div>
-                <button style={{ padding: '8px 18px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none', borderRadius: 10, color: '#fff', fontWeight: 600, fontSize: 12, cursor: 'pointer', fontFamily: 'Inter, sans-serif', flexShrink: 0 }}>Apply →</button>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      );
+              )}
+            </div>
+
+            {/* Filter Tabs */}
+            <div style={{ display: 'flex', gap: 8, margin: '20px 0', flexWrap: 'wrap' }}>
+              {['All', 'Jobs', 'Internships', 'Remote', 'On-site'].map(f => {
+                const active = jobFilter === f;
+                return (
+                  <button
+                    key={f}
+                    onClick={() => setJobFilter(f)}
+                    style={{
+                      padding: '7px 18px',
+                      background: active ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.04)',
+                      border: `1.5px solid ${active ? '#6366f1' : 'rgba(255,255,255,0.08)'}`,
+                      borderRadius: 20,
+                      color: active ? '#fff' : '#64748b',
+                      fontSize: 12,
+                      fontWeight: active ? 700 : 500,
+                      cursor: 'pointer',
+                      fontFamily: 'Inter, sans-serif',
+                      transition: 'all 0.2s',
+                      boxShadow: active ? '0 0 14px rgba(99,102,241,0.25)' : 'none'
+                    }}
+                  >
+                    {f === 'Jobs' ? 'Full-time Jobs' : f === 'Internships' ? 'Student Internships' : f}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Jobs List */}
+            <div style={{ display: 'grid', gap: 12 }}>
+              {filteredJobs.map((j, i) => {
+                const isApplied = appliedJobs.includes(j.id);
+                return (
+                  <motion.div
+                    key={j.id}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.04 }}
+                    style={{
+                      background: isApplied ? 'rgba(16,185,129,0.04)' : 'rgba(255,255,255,0.04)',
+                      border: `1px solid ${isApplied ? 'rgba(16,185,129,0.25)' : 'rgba(255,255,255,0.08)'}`,
+                      borderRadius: 14,
+                      padding: '18px 20px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 16,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = isApplied ? '#10b981' : 'rgba(99,102,241,0.4)';
+                      e.currentTarget.style.background = isApplied ? 'rgba(16,185,129,0.08)' : 'rgba(99,102,241,0.06)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = isApplied ? 'rgba(16,185,129,0.25)' : 'rgba(255,255,255,0.08)';
+                      e.currentTarget.style.background = isApplied ? 'rgba(16,185,129,0.04)' : 'rgba(255,255,255,0.04)';
+                    }}
+                  >
+                    <div style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 12,
+                      background: 'rgba(255,255,255,0.06)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 24,
+                      flexShrink: 0
+                    }}>
+                      {j.logo}
+                    </div>
+
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        <h4 style={{ fontSize: 15, fontWeight: 700, color: '#fff', margin: 0 }}>{j.role}</h4>
+                        <span style={{
+                          fontSize: 10,
+                          padding: '2px 8px',
+                          borderRadius: 20,
+                          fontWeight: 700,
+                          background: j.type === 'Internship' ? 'rgba(6,182,212,0.18)' : 'rgba(16,185,129,0.18)',
+                          color: j.type === 'Internship' ? '#67e8f9' : '#6ee7b7'
+                        }}>
+                          {j.type}
+                        </span>
+                        {j.location.toLowerCase().includes('remote') && (
+                          <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, fontWeight: 600, background: 'rgba(99,102,241,0.15)', color: '#a5b4fc' }}>
+                            Remote
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>
+                        {j.company} · {j.location} · <strong style={{ color: '#cbd5e1' }}>{j.salary}</strong> · Posted {j.posted}
+                      </div>
+                    </div>
+
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                      <div style={{ fontSize: 18, fontWeight: 800, color: '#6366f1' }}>{j.match}%</div>
+                      <div style={{ fontSize: 10, color: '#64748b' }}>AI Match</div>
+                    </div>
+
+                    {isApplied ? (
+                      <span style={{
+                        padding: '8px 18px',
+                        background: 'rgba(16,185,129,0.15)',
+                        border: '1px solid rgba(16,185,129,0.35)',
+                        borderRadius: 10,
+                        color: '#6ee7b7',
+                        fontWeight: 700,
+                        fontSize: 12,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6
+                      }}>
+                        <span>✓</span> Applied
+                      </span>
+                    ) : (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedJobForApp(j);
+                          setShowJobAppModal(true);
+                        }}
+                        style={{
+                          padding: '8px 20px',
+                          background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                          border: 'none',
+                          borderRadius: 10,
+                          color: '#fff',
+                          fontWeight: 700,
+                          fontSize: 12,
+                          cursor: 'pointer',
+                          fontFamily: 'Inter, sans-serif',
+                          flexShrink: 0,
+                          boxShadow: '0 4px 14px rgba(99,102,241,0.3)',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        Apply →
+                      </button>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        );
+      }
 
       case 'analytics': return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -1426,6 +1591,15 @@ const Dashboard = () => {
         isOpen={showCodingModal}
         onClose={() => setShowCodingModal(false)}
         initialProblemId={selectedProblemId}
+      />
+
+      {/* Interactive Student Job & Internship Application Modal */}
+      <JobApplicationModal
+        isOpen={showJobAppModal}
+        onClose={() => setShowJobAppModal(false)}
+        job={selectedJobForApp}
+        user={user}
+        onApplicationSuccess={handleApplySuccess}
       />
     </div>
   );
