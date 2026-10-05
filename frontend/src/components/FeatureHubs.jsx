@@ -223,36 +223,6 @@ export const CertificateVerificationView = () => {
   );
 };
 
-// --- FEATURE 16: Company Interview Pattern ---
-export const CompanyInterviewPatternView = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ§© Company Interview Pattern Hub</h1>
-    <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Recruitment patterns, coding difficulty levels, hiring rounds & FAQs for top IT firms</p>
-
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>
-      {[
-        { name: 'Google', rounds: 4, diff: 'Hard (DSA & Systems)', level: 'Advanced', icon: 'ðŸ”µ' },
-        { name: 'Amazon', rounds: 3, diff: 'Medium-Hard + LP', level: 'Advanced', icon: 'ðŸŸ ' },
-        { name: 'Microsoft', rounds: 3, diff: 'Medium (Algorithms)', level: 'Intermediate', icon: 'ðŸŸ¦' },
-        { name: 'TCS Digital/NQT', rounds: 2, diff: 'Easy-Medium', level: 'Beginner', icon: 'ðŸ¢' },
-        { name: 'Infosys SP/DSE', rounds: 2, diff: 'Medium Coding', level: 'Intermediate', icon: 'ðŸ”·' },
-        { name: 'Zoho', rounds: 5, diff: 'Complex C/Recursion', level: 'Advanced', icon: 'âš™ï¸' }
-      ].map((c, i) => (
-        <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 18 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-            <span style={{ fontSize: 24 }}>{c.icon}</span>
-            <div>
-              <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 700 }}>{c.name}</h3>
-              <span style={{ fontSize: 10, color: '#94a3b8' }}>{c.level} Level</span>
-            </div>
-          </div>
-          <div style={{ fontSize: 12, color: '#cbd5e1', marginBottom: 4 }}>ðŸ“‹ Rounds: {c.rounds} Stages</div>
-          <div style={{ fontSize: 12, color: '#10b981', fontWeight: 600 }}>ðŸŽ¯ Focus: {c.diff}</div>
-        </div>
-      ))}
-    </div>
-  </motion.div>
-);
 
 // --- FEATURE 17: Salary Predictor ---
 export const SalaryPredictorView = () => {
@@ -619,27 +589,6 @@ export const HackathonHubView = ({ user }) => {
 };
 
 
-// --- FEATURE 22: AI Career Success Predictor ---
-export const CareerSuccessPredictorView = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ¤– AI Career Success Predictor</h1>
-    <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Predict probability of getting selected, placement readiness, interview performance & salary forecast</p>
-
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
-      <div style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(16,185,129,0.1))', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 20, padding: 24 }}>
-        <span style={{ fontSize: 11, color: '#6366f1', fontWeight: 700, textTransform: 'uppercase' }}>SELECTION PROBABILITY</span>
-        <h2 style={{ fontSize: 44, fontWeight: 900, color: '#fff', marginTop: 2 }}>82%</h2>
-        <div style={{ fontSize: 13, color: '#6ee7b7', marginTop: 4 }}>High chance of clearing Tier-1 & Mid-size tech company interviews</div>
-      </div>
-
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: 24 }}>
-        <span style={{ fontSize: 11, color: '#64748b', fontWeight: 700, textTransform: 'uppercase' }}>EXPECTED INTERVIEW PERFORMANCE</span>
-        <h2 style={{ fontSize: 32, fontWeight: 800, color: '#a5b4fc', marginTop: 6 }}>8.4 / 10</h2>
-        <div style={{ fontSize: 12, color: '#94a3b8', marginTop: 4 }}>Strong problem solving & technical articulation</div>
-      </div>
-    </div>
-  </motion.div>
-);
 
 // --- FEATURE 23 & 24: Daily Challenge & Tech News ---
 export const DailyChallengeAndNewsView = () => (

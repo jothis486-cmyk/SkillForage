@@ -25,11 +25,9 @@ import {
   FreelancingReadinessView,
   InterviewExperienceHubView,
   CertificateVerificationView,
-  CompanyInterviewPatternView,
   SalaryPredictorView,
   TeamCollaborationView,
   HackathonHubView,
-  CareerSuccessPredictorView,
   DailyChallengeAndNewsView
 } from '../components/FeatureHubs';
 
@@ -56,9 +54,7 @@ const SIDEBAR_ITEMS = [
   { icon: '🔥', label: 'Daily Challenge & News', id: 'daily-challenge' },
   { icon: '📂', label: 'GitHub Analyzer', id: 'github-analyzer' },
   { icon: '📄', label: 'Resume vs Job Match', id: 'job-match' },
-  { icon: '🤖', label: 'AI Success Predictor', id: 'career-success' },
   { icon: '👨‍💻', label: 'Debug & Fix Code', id: 'project-debugger' },
-  { icon: '🧩', label: 'Company Patterns', id: 'company-patterns' },
   { icon: '👤', label: 'Profile', id: 'profile' },
   { icon: '⚙', label: 'Settings', id: 'profile' },
 ];
@@ -216,14 +212,12 @@ const Dashboard = () => {
       case 'project-debugger': return <ProjectDebugger />;
       case 'github-analyzer': return <GitHubAnalyzer />;
       case 'job-match': return <JobMatcher />;
-      case 'career-success': return <CareerSuccessPredictorView />;
       case 'skill-tracker': return <IndustrySkillTrackerView />;
       case 'placement-planner': return <PlacementPrep />;
       case 'ai-mentor': return <AIMentorView />;
       case 'freelancing': return <FreelancingReadinessView />;
       case 'interview-experiences': return <InterviewExperienceHubView />;
       case 'certifications': return <CertificateVerificationView />;
-      case 'company-patterns': return <CompanyInterviewPatternView />;
       case 'salary-predictor': return <SalaryPredictorView />;
       case 'team-collaboration': return <TeamCollaborationView />;
       case 'hackathons': return <HackathonHubView />;
