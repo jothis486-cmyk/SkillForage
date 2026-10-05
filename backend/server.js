@@ -144,6 +144,7 @@ app.get('/health', (req, res) => {
     memoryStoreReady: memoryUsers.size > 0,
     timestamp: new Date().toISOString()
   });
+});
 // Root route
 app.get('/', (req, res) => {
   res.send('AI Skill Gap Detection API is running...');
