@@ -316,30 +316,307 @@ export const TeamCollaborationView = () => (
   </motion.div>
 );
 
-// --- FEATURE 20: Hackathon & Contest Hub ---
-export const HackathonHubView = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>🏅 Hackathon & Coding Contest Hub</h1>
-    <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Upcoming global hackathons, Google Solution Challenge, Imagine Cup & SIH links</p>
+import HackathonRegisterModal from './HackathonRegisterModal';
 
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-      {[
-        { name: 'Google Solution Challenge 2026', org: 'Google Developers', prize: '$12,000 USD', daysLeft: '14 Days Left', link: 'https://developers.google.com' },
-        { name: 'Smart India Hackathon (SIH)', org: 'Govt. of India', prize: '₹1,00,000', daysLeft: '22 Days Left', link: 'https://sih.gov.in' },
-        { name: 'Microsoft Imagine Cup', org: 'Microsoft', prize: '$100,000 USD + Azure Credits', daysLeft: '30 Days Left', link: 'https://imaginecup.microsoft.com' }
-      ].map((h, i) => (
-        <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
-          <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, background: 'rgba(239,68,68,0.15)', color: '#fca5a5', fontWeight: 600 }}>🔥 {h.daysLeft}</span>
-          <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 700, marginTop: 8, marginBottom: 4 }}>{h.name}</h3>
-          <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 12 }}>Host: {h.org} · Prize Pool: <strong style={{ color: '#10b981' }}>{h.prize}</strong></div>
-          <a href={h.link} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '8px 16px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', borderRadius: 8, color: '#fff', fontSize: 12, fontWeight: 600, textDecoration: 'none' }}>
-            Register Now →
-          </a>
+// --- FEATURE 20: Hackathon & Contest Hub ---
+export const HackathonHubView = ({ user }) => {
+  const [selectedFilter, setSelectedFilter] = useState('All');
+  const [selectedHackathon, setSelectedHackathon] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [registeredIds, setRegisteredIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem('registeredHackathons');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const HACKATHONS = [
+    // Coimbatore College Hackathons
+    {
+      id: 'psg-kriya',
+      name: 'PSG Kriya National Tech Hackathon 2026',
+      org: 'PSG College of Technology (PSG Tech)',
+      location: 'PSG Tech Campus, Peelamedu, Coimbatore',
+      category: 'Coimbatore Colleges',
+      prize: '₹2,50,000',
+      daysLeft: '12 Days Left',
+      badge: 'Coimbatore Campus',
+      tag: 'AI, IoT & Robotics',
+      link: 'https://psgtech.edu'
+    },
+    {
+      id: 'cit-cybervision',
+      name: 'CIT CyberVision AI & ML Hackathon',
+      org: 'Coimbatore Institute of Technology (CIT)',
+      location: 'CIT Campus, Civil Aerodrome, Coimbatore',
+      category: 'Coimbatore Colleges',
+      prize: '₹1,50,000',
+      daysLeft: '18 Days Left',
+      badge: 'Coimbatore Campus',
+      tag: 'AI & Data Science',
+      link: 'https://cit.edu.in'
+    },
+    {
+      id: 'skcet-hackfest',
+      name: 'SKCET National HackFest 2026',
+      org: 'Sri Krishna College of Engg & Tech (SKCET)',
+      location: 'SKCET Campus, Kuniamuthur, Coimbatore',
+      category: 'Coimbatore Colleges',
+      prize: '₹2,00,000',
+      daysLeft: '8 Days Left',
+      badge: 'Coimbatore Campus',
+      tag: 'Full Stack & Web3',
+      link: 'https://skcet.ac.in'
+    },
+    {
+      id: 'kct-yugam',
+      name: 'KCT Yugam Innovation Grand Hackathon',
+      org: 'Kumaraguru College of Technology (KCT)',
+      location: 'KCT Campus, Saravanampatti, Coimbatore',
+      category: 'Coimbatore Colleges',
+      prize: '₹3,00,000',
+      daysLeft: '15 Days Left',
+      badge: 'Coimbatore Campus',
+      tag: 'Smart Cities & AI',
+      link: 'https://kct.ac.in'
+    },
+    {
+      id: 'amrita-anokha',
+      name: 'Amrita Anokha AI & Robotics Hackathon',
+      org: 'Amrita Vishwa Vidyapeetham',
+      location: 'Amrita Campus, Ettimadai, Coimbatore',
+      category: 'Coimbatore Colleges',
+      prize: '₹5,00,000',
+      daysLeft: '25 Days Left',
+      badge: 'Coimbatore Campus',
+      tag: 'Robotics & Deep Tech',
+      link: 'https://amrita.edu'
+    },
+    {
+      id: 'srec-smart-city',
+      name: 'SREC Smart City & IoT Techathon',
+      org: 'Sri Ramakrishna Engineering College (SREC)',
+      location: 'SREC Campus, Vattamalaipalayam, Coimbatore',
+      category: 'Coimbatore Colleges',
+      prize: '₹1,00,000',
+      daysLeft: '20 Days Left',
+      badge: 'Coimbatore Campus',
+      tag: 'IoT & Clean Energy',
+      link: 'https://srec.ac.in'
+    },
+    {
+      id: 'gct-techvista',
+      name: 'GCT TechVista Codeathon 2026',
+      org: 'Government College of Technology (GCT)',
+      location: 'GCT Campus, Thadagam Road, Coimbatore',
+      category: 'Coimbatore Colleges',
+      prize: '₹1,20,000',
+      daysLeft: '10 Days Left',
+      badge: 'Coimbatore Campus',
+      tag: 'DSA & Open Source',
+      link: 'https://gct.ac.in'
+    },
+    // Global & National
+    {
+      id: 'google-solution-challenge',
+      name: 'Google Solution Challenge 2026',
+      org: 'Google Developers',
+      location: 'Global (Virtual)',
+      category: 'Global AI',
+      prize: '$12,000 USD',
+      daysLeft: '14 Days Left',
+      badge: 'Global Flagship',
+      tag: 'UN Sustainable Goals',
+      link: 'https://developers.google.com'
+    },
+    {
+      id: 'sih-2026',
+      name: 'Smart India Hackathon (SIH 2026)',
+      org: 'Govt. of India & Ministry of Education',
+      location: 'India (National Nodal Centers)',
+      category: 'National & SIH',
+      prize: '₹1,00,000',
+      daysLeft: '22 Days Left',
+      badge: 'Govt of India',
+      tag: 'National Problem Statements',
+      link: 'https://sih.gov.in'
+    },
+    {
+      id: 'microsoft-imagine-cup',
+      name: 'Microsoft Imagine Cup 2026',
+      org: 'Microsoft Azure',
+      location: 'Global (Virtual)',
+      category: 'Global AI',
+      prize: '$100,000 USD + Azure Credits',
+      daysLeft: '30 Days Left',
+      badge: 'Global Flagship',
+      tag: 'AI Startup & Cloud',
+      link: 'https://imaginecup.microsoft.com'
+    }
+  ];
+
+  const handleRegisterSuccess = (hackathonId) => {
+    setRegisteredIds(prev => {
+      const next = [...new Set([...prev, hackathonId])];
+      try { localStorage.setItem('registeredHackathons', JSON.stringify(next)); } catch (_) {}
+      return next;
+    });
+  };
+
+  const filteredList = HACKATHONS.filter(h => {
+    if (selectedFilter === 'Coimbatore Colleges') return h.category === 'Coimbatore Colleges';
+    if (selectedFilter === 'National & SIH') return h.category === 'National & SIH';
+    if (selectedFilter === 'Global AI') return h.category === 'Global AI';
+    return true;
+  });
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 6 }}>
+        <div>
+          <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', margin: 0 }}>🏅 Hackathon & Coding Contest Hub</h1>
+          <p style={{ color: '#64748b', fontSize: 14, margin: '4px 0 0' }}>Coimbatore college hackathons, SIH, Google Solution Challenge & Microsoft Imagine Cup</p>
         </div>
-      ))}
-    </div>
-  </motion.div>
-);
+        {registeredIds.length > 0 && (
+          <div style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 20, padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 13 }}>🎉</span>
+            <span style={{ color: '#6ee7b7', fontSize: 12, fontWeight: 700 }}>{registeredIds.length} Team Registration{registeredIds.length > 1 ? 's' : ''} Confirmed</span>
+          </div>
+        )}
+      </div>
+
+      {/* Filter Tabs */}
+      <div style={{ display: 'flex', gap: 8, margin: '20px 0', flexWrap: 'wrap' }}>
+        {[
+          { id: 'All', label: 'All Contests' },
+          { id: 'Coimbatore Colleges', label: 'Coimbatore Colleges 🏫' },
+          { id: 'National & SIH', label: 'National & SIH 🇮🇳' },
+          { id: 'Global AI', label: 'Global AI & Tech 🌍' }
+        ].map(f => {
+          const active = selectedFilter === f.id;
+          return (
+            <button
+              key={f.id}
+              onClick={() => setSelectedFilter(f.id)}
+              style={{
+                padding: '8px 18px',
+                background: active ? 'rgba(99,102,241,0.25)' : 'rgba(255,255,255,0.04)',
+                border: `1.5px solid ${active ? '#6366f1' : 'rgba(255,255,255,0.08)'}`,
+                borderRadius: 20,
+                color: active ? '#fff' : '#64748b',
+                fontSize: 12,
+                fontWeight: active ? 700 : 500,
+                cursor: 'pointer',
+                fontFamily: 'Inter, sans-serif',
+                transition: 'all 0.2s',
+                boxShadow: active ? '0 0 14px rgba(99,102,241,0.25)' : 'none'
+              }}
+            >
+              {f.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        {filteredList.map((h) => {
+          const isRegistered = registeredIds.includes(h.id);
+          return (
+            <div
+              key={h.id}
+              style={{
+                background: isRegistered ? 'rgba(16,185,129,0.04)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${isRegistered ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                borderRadius: 16,
+                padding: 20,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                transition: 'all 0.2s'
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
+                  <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, background: 'rgba(239,68,68,0.15)', color: '#fca5a5', fontWeight: 600 }}>
+                    🔥 {h.daysLeft}
+                  </span>
+                  <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, background: 'rgba(99,102,241,0.15)', color: '#a5b4fc', fontWeight: 600 }}>
+                    {h.badge}
+                  </span>
+                </div>
+
+                <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 700, margin: '0 0 6px' }}>{h.name}</h3>
+                
+                <div style={{ color: '#94a3b8', fontSize: 12, marginBottom: 8, lineHeight: 1.5 }}>
+                  Host: <strong style={{ color: '#fff' }}>{h.org}</strong>
+                  <br />
+                  Venue: <span style={{ color: '#cbd5e1' }}>{h.location}</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 16, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 11, color: '#64748b' }}>Prize Pool:</span>
+                  <strong style={{ color: '#10b981', fontSize: 14 }}>{h.prize}</strong>
+                  <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 12, background: 'rgba(255,255,255,0.06)', color: '#94a3b8' }}>
+                    {h.tag}
+                  </span>
+                </div>
+              </div>
+
+              {isRegistered ? (
+                <span style={{
+                  display: 'inline-block',
+                  textAlign: 'center',
+                  padding: '9px 18px',
+                  background: 'rgba(16,185,129,0.15)',
+                  border: '1px solid rgba(16,185,129,0.35)',
+                  borderRadius: 10,
+                  color: '#6ee7b7',
+                  fontSize: 12,
+                  fontWeight: 700
+                }}>
+                  ✓ Team Registered
+                </span>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSelectedHackathon(h);
+                    setShowModal(true);
+                  }}
+                  style={{
+                    padding: '9px 18px',
+                    background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                    border: 'none',
+                    borderRadius: 10,
+                    color: '#fff',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    fontFamily: 'Inter, sans-serif',
+                    boxShadow: '0 4px 14px rgba(99,102,241,0.3)'
+                  }}
+                >
+                  Register Now →
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Modal */}
+      <HackathonRegisterModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        hackathon={selectedHackathon}
+        user={user}
+        onRegisterSuccess={handleRegisterSuccess}
+      />
+    </motion.div>
+  );
+};
 
 // --- FEATURE 21: Open Source Guide ---
 export const OpenSourceGuideView = () => (
