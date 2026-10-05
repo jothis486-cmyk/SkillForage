@@ -29,7 +29,6 @@ import {
   SalaryPredictorView,
   TeamCollaborationView,
   HackathonHubView,
-  OpenSourceGuideView,
   CareerSuccessPredictorView,
   DailyChallengeAndNewsView
 } from '../components/FeatureHubs';
@@ -54,7 +53,6 @@ const SIDEBAR_ITEMS = [
   { icon: '📅', label: 'Placement Planner', id: 'placement-planner' },
   { icon: '💰', label: 'Salary Predictor', id: 'salary-predictor' },
   { icon: '🏅', label: 'Hackathons & Contests', id: 'hackathons' },
-  { icon: '🌍', label: 'Open Source Guide', id: 'open-source' },
   { icon: '🔥', label: 'Daily Challenge & News', id: 'daily-challenge' },
   { icon: '📂', label: 'GitHub Analyzer', id: 'github-analyzer' },
   { icon: '📄', label: 'Resume vs Job Match', id: 'job-match' },
@@ -229,7 +227,7 @@ const Dashboard = () => {
       case 'salary-predictor': return <SalaryPredictorView />;
       case 'team-collaboration': return <TeamCollaborationView />;
       case 'hackathons': return <HackathonHubView />;
-      case 'open-source': return <OpenSourceGuideView />;
+
       case 'daily-challenge': return <DailyChallengeAndNewsView />;
       case 'ai-interview': return <AIInterviewSystem />;
       case 'live-class-assessment': return <LiveClassAssessment />;
