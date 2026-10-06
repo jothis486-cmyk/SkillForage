@@ -1,53 +1,12 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import api from '../api/api';
 
-// --- FEATURE 6: Industry Skill Tracker ---
-export const IndustrySkillTrackerView = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ“Š Industry Skill Tracker</h1>
-    <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Real-time demand metrics for languages, frameworks, tools & future tech</p>
-    
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
-        <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 700, marginBottom: 14 }}>ðŸ”¥ Top Programming Languages (2026 Demand)</h3>
-        {[
-          { name: 'Python (AI & Data)', demand: 94, color: '#6366f1' },
-          { name: 'JavaScript / TypeScript', demand: 90, color: '#06b6d4' },
-          { name: 'Java (Enterprise)', demand: 78, color: '#f59e0b' },
-          { name: 'C++ / Rust (Systems)', demand: 72, color: '#8b5cf6' },
-          { name: 'Go (Cloud Native)', demand: 68, color: '#10b981' }
-        ].map((item, i) => (
-          <div key={i} style={{ marginBottom: 12 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 4 }}>
-              <span style={{ color: '#cbd5e1' }}>{item.name}</span>
-              <span style={{ color: item.color, fontWeight: 700 }}>{item.demand}% Demand</span>
-            </div>
-            <div style={{ height: 6, background: 'rgba(255,255,255,0.06)', borderRadius: 3, overflow: 'hidden' }}>
-              <div style={{ width: `${item.demand}%`, height: '100%', background: item.color, borderRadius: 3 }} />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
-        <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 700, marginBottom: 14 }}>ðŸš€ Demanded Frameworks & Cloud Tools</h3>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {['React.js', 'Next.js', 'FastAPI', 'PyTorch', 'Docker', 'Kubernetes', 'AWS', 'TailwindCSS', 'LangChain', 'Redis', 'GraphQL', 'PostgreSQL'].map(tool => (
-            <span key={tool} style={{ background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)', color: '#a5b4fc', padding: '6px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600 }}>
-              âš¡ {tool}
-            </span>
-          ))}
-        </div>
-      </div>
-    </div>
-  </motion.div>
-);
 
 // --- FEATURE 8: AI Mentor ---
 export const AIMentorView = () => {
   const [messages, setMessages] = useState([
-    { role: 'ai', text: "Hello! I am your personal AI Mentor ðŸ§  Ask me anything about tech stacks, preparation strategies, or interview readiness!" }
+    { role: 'ai', text: "Hello! I am your personal AI Mentor 🧠 Ask me anything about tech stacks, preparation strategies, or interview readiness!" }
   ]);
   const [input, setInput] = useState('');
 
@@ -71,7 +30,7 @@ export const AIMentorView = () => {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ§  AI Personal Mentor</h1>
+      <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>AI Personal Mentor</h1>
       <p style={{ color: '#64748b', fontSize: 14, marginBottom: 20 }}>Ask your mentor for tailored advice on career choices, tech stacks & interview readiness</p>
 
       <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20, minHeight: 340, display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16, overflowY: 'auto' }}>
@@ -104,7 +63,7 @@ export const AIMentorView = () => {
           style={{ flex: 1, padding: '12px 16px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, color: '#fff', fontSize: 13, outline: 'none' }}
         />
         <button onClick={() => sendMsg()} style={{ padding: '12px 24px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none', borderRadius: 12, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
-          Send â†—
+          Send ↗
         </button>
       </div>
     </motion.div>
@@ -114,7 +73,7 @@ export const AIMentorView = () => {
 // --- FEATURE 9: Freelancing Readiness ---
 export const FreelancingReadinessView = () => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ’¼ Freelancing Readiness Hub</h1>
+    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>Freelancing Readiness Hub</h1>
     <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Skill assessments, proposal templates, pricing calculators & top freelance platforms</p>
 
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
@@ -125,7 +84,7 @@ export const FreelancingReadinessView = () => (
       </div>
       <div style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.25)', borderRadius: 16, padding: 20 }}>
         <div style={{ color: '#a5b4fc', fontWeight: 700, fontSize: 12 }}>ESTIMATED HOURLY RATE</div>
-        <div style={{ fontSize: 32, fontWeight: 900, color: '#fff', marginTop: 4 }}>$35â€“$65 <span style={{ fontSize: 14, color: '#64748b' }}>/ hr</span></div>
+        <div style={{ fontSize: 32, fontWeight: 900, color: '#fff', marginTop: 4 }}>$35–$65 <span style={{ fontSize: 14, color: '#64748b' }}>/ hr</span></div>
         <div style={{ fontSize: 11, color: '#a5b4fc', marginTop: 4 }}>Based on Full-Stack & React skill set</div>
       </div>
       <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
@@ -137,7 +96,7 @@ export const FreelancingReadinessView = () => (
 
     {/* Proposal Template Generator */}
     <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
-      <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 700, marginBottom: 12 }}>ðŸ“‘ AI Client Proposal Template Generator</h3>
+      <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 700, marginBottom: 12 }}>📑 AI Client Proposal Template Generator</h3>
       <pre style={{ background: 'rgba(0,0,0,0.4)', padding: 16, borderRadius: 10, color: '#6ee7b7', fontSize: 12, fontFamily: 'monospace', overflowX: 'auto' }}>
 {`Hi [Client Name],
 
@@ -161,15 +120,15 @@ Best regards,
 // --- FEATURE 10: Interview Experience Hub ---
 export const InterviewExperienceHubView = () => (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ† Interview Experience Hub</h1>
+    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>Interview Experience Hub</h1>
     <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Student-contributed interview questions, rounds breakdowns, difficulty ratings & compensation packages</p>
 
     <div style={{ display: 'grid', gap: 14 }}>
       {[
-        { company: 'Google', role: 'Software Engineer L3', rounds: '4 Rounds (1 Screen + 3 Onsite DSA)', diff: 'Hard', salary: 'â‚¹28 LPA', tips: 'Focus heavily on Graph algorithms, Dynamic Programming, and clean modular code.' },
-        { company: 'Amazon', role: 'SDE-1', rounds: '3 Rounds (OA + 2 Tech Rounds)', diff: 'Medium-Hard', salary: 'â‚¹22 LPA', tips: 'Prepare Amazon Leadership Principles deeply for behavioral questions!' },
-        { company: 'Microsoft', role: 'Full Stack Engineer', rounds: '3 Tech Rounds', diff: 'Medium', salary: 'â‚¹20 LPA', tips: 'Brush up System Design basics, OOP principles, and React state management.' },
-        { company: 'Zoho', role: 'Software Developer', rounds: '5 Rounds (Aptitude + C Coding + Advanced Coding + Tech HR + General HR)', diff: 'Medium', salary: 'â‚¹8.5 LPA', tips: 'Strong C/C++ fundamentals and recursion logic are required.' }
+        { company: 'Google', role: 'Software Engineer L3', rounds: '4 Rounds (1 Screen + 3 Onsite DSA)', diff: 'Hard', salary: '₹28 LPA', tips: 'Focus heavily on Graph algorithms, Dynamic Programming, and clean modular code.' },
+        { company: 'Amazon', role: 'SDE-1', rounds: '3 Rounds (OA + 2 Tech Rounds)', diff: 'Medium-Hard', salary: '₹22 LPA', tips: 'Prepare Amazon Leadership Principles deeply for behavioral questions!' },
+        { company: 'Microsoft', role: 'Full Stack Engineer', rounds: '3 Tech Rounds', diff: 'Medium', salary: '₹20 LPA', tips: 'Brush up System Design basics, OOP principles, and React state management.' },
+        { company: 'Zoho', role: 'Software Developer', rounds: '5 Rounds (Aptitude + C Coding + Advanced Coding + Tech HR + General HR)', diff: 'Medium', salary: '₹8.5 LPA', tips: 'Strong C/C++ fundamentals and recursion logic are required.' }
       ].map((exp, i) => (
         <div key={i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 14, padding: 18 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
@@ -182,8 +141,8 @@ export const InterviewExperienceHubView = () => (
               <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, background: exp.diff === 'Hard' ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)', color: exp.diff === 'Hard' ? '#fca5a5' : '#fcd34d' }}>{exp.diff}</span>
             </div>
           </div>
-          <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 6 }}>ðŸ“‹ {exp.rounds}</div>
-          <div style={{ fontSize: 13, color: '#cbd5e1', lineHeight: 1.5 }}>ðŸ’¡ <strong>Selection Tip:</strong> {exp.tips}</div>
+          <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 6 }}>📋 {exp.rounds}</div>
+          <div style={{ fontSize: 13, color: '#cbd5e1', lineHeight: 1.5 }}>💡 <strong>Selection Tip:</strong> {exp.tips}</div>
         </div>
       ))}
     </div>
@@ -196,11 +155,11 @@ export const CertificateVerificationView = () => {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸŽ“ AI Certificate Verification</h1>
+      <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>AI Certificate Verification</h1>
       <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Verifiable credentials with QR verification, Certificate IDs & Blockchain proof simulation</p>
 
       <div style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(16,185,129,0.1))', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 20, padding: 32, maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
-        <div style={{ fontSize: 44, marginBottom: 10 }}>ðŸ…</div>
+        <div style={{ fontSize: 44, marginBottom: 10 }}>🏅</div>
         <span style={{ fontSize: 11, color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>OFFICIAL CERTIFICATE OF COMPLETION</span>
         <h2 style={{ fontSize: 24, fontWeight: 800, color: '#fff', marginTop: 6, marginBottom: 4 }}>Full-Stack & AI Engineering Masterclass</h2>
         <div style={{ color: '#94a3b8', fontSize: 13, marginBottom: 20 }}>Awarded to <strong>Student Candidate</strong> for passing all capstones & code audits.</div>
@@ -215,7 +174,7 @@ export const CertificateVerificationView = () => {
           <div style={{ textAlign: 'left' }}>
             <div style={{ fontSize: 12, color: '#64748b' }}>Certificate ID</div>
             <div style={{ fontSize: 14, fontWeight: 700, color: '#a5b4fc', fontFamily: 'monospace' }}>{certId}</div>
-            <div style={{ fontSize: 11, color: '#10b981', marginTop: 4 }}>âœ“ Blockchain Verified Signature</div>
+            <div style={{ fontSize: 11, color: '#10b981', marginTop: 4 }}>✓ Blockchain Verified Signature</div>
           </div>
         </div>
       </div>
@@ -224,67 +183,6 @@ export const CertificateVerificationView = () => {
 };
 
 
-// --- FEATURE 17: Salary Predictor ---
-export const SalaryPredictorView = () => {
-  const [role, setRole] = useState('Full Stack Developer');
-  const [exp, setExp] = useState('1-2 Years');
-
-  return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ’° AI Salary Predictor</h1>
-      <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Predict expected salary bands based on skills, experience, project score & target company tier</p>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-        <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
-          <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 700, marginBottom: 14 }}>Enter Profile Parameters</h3>
-          <div style={{ marginBottom: 14 }}>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: 12, marginBottom: 4 }}>Target Role</label>
-            <select value={role} onChange={e => setRole(e.target.value)} style={{ width: '100%', padding: 10, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#fff', fontSize: 13, outline: 'none' }}>
-              <option value="Software Engineer">Software Engineer</option>
-              <option value="Full Stack Developer">Full Stack Developer</option>
-              <option value="Data Scientist">Data Scientist</option>
-              <option value="AI Engineer">AI Engineer</option>
-            </select>
-          </div>
-          <div>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: 12, marginBottom: 4 }}>Experience Level</label>
-            <select value={exp} onChange={e => setExp(e.target.value)} style={{ width: '100%', padding: 10, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, color: '#fff', fontSize: 13, outline: 'none' }}>
-              <option value="Fresher (0 Years)">Fresher (0 Years)</option>
-              <option value="1-2 Years">1-2 Years</option>
-              <option value="3-5 Years">3-5 Years</option>
-            </select>
-          </div>
-        </div>
-
-        <div style={{ background: 'linear-gradient(135deg, rgba(16,185,129,0.15), rgba(99,102,241,0.1))', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 16, padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <span style={{ fontSize: 11, color: '#10b981', fontWeight: 700, textTransform: 'uppercase' }}>ESTIMATED COMPENSATION</span>
-          <h2 style={{ fontSize: 36, fontWeight: 900, color: '#fff', marginTop: 4 }}>â‚¹10â€“18 LPA</h2>
-          <div style={{ fontSize: 13, color: '#6ee7b7', marginTop: 4 }}>High growth trajectory (+30% bonus for AWS & Docker skills)</div>
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
-// --- FEATURE 19: Team Project Collaboration ---
-export const TeamCollaborationView = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ‘¨â€ðŸ’» Team Project Collaboration</h1>
-    <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Manage student development teams, Kanban task boards, file sharing & video meeting room</p>
-
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
-      {['Backlog / To-Do', 'In Progress', 'Completed'].map((col, i) => (
-        <div key={col} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 14, padding: 16 }}>
-          <h3 style={{ color: '#a5b4fc', fontSize: 14, fontWeight: 700, marginBottom: 12 }}>{col}</h3>
-          <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, padding: 12, marginBottom: 8 }}>
-            <div style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{i === 0 ? 'Design Mongo ER Schema' : i === 1 ? 'Build JWT Auth Endpoint' : 'Setup Scaffolding'}</div>
-            <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>Assigned to: Alex & Sarah</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  </motion.div>
-);
 
 import HackathonRegisterModal from './HackathonRegisterModal';
 
@@ -310,7 +208,7 @@ export const HackathonHubView = ({ user }) => {
       org: 'PSG College of Technology (PSG Tech)',
       location: 'PSG Tech Campus, Peelamedu, Coimbatore',
       category: 'Coimbatore Colleges',
-      prize: 'â‚¹2,50,000',
+      prize: '₹2,50,000',
       daysLeft: '12 Days Left',
       badge: 'Coimbatore Campus',
       tag: 'AI, IoT & Robotics',
@@ -322,7 +220,7 @@ export const HackathonHubView = ({ user }) => {
       org: 'Coimbatore Institute of Technology (CIT)',
       location: 'CIT Campus, Civil Aerodrome, Coimbatore',
       category: 'Coimbatore Colleges',
-      prize: 'â‚¹1,50,000',
+      prize: '₹1,50,000',
       daysLeft: '18 Days Left',
       badge: 'Coimbatore Campus',
       tag: 'AI & Data Science',
@@ -334,7 +232,7 @@ export const HackathonHubView = ({ user }) => {
       org: 'Sri Krishna College of Engg & Tech (SKCET)',
       location: 'SKCET Campus, Kuniamuthur, Coimbatore',
       category: 'Coimbatore Colleges',
-      prize: 'â‚¹2,00,000',
+      prize: '₹2,00,000',
       daysLeft: '8 Days Left',
       badge: 'Coimbatore Campus',
       tag: 'Full Stack & Web3',
@@ -346,7 +244,7 @@ export const HackathonHubView = ({ user }) => {
       org: 'Kumaraguru College of Technology (KCT)',
       location: 'KCT Campus, Saravanampatti, Coimbatore',
       category: 'Coimbatore Colleges',
-      prize: 'â‚¹3,00,000',
+      prize: '₹3,00,000',
       daysLeft: '15 Days Left',
       badge: 'Coimbatore Campus',
       tag: 'Smart Cities & AI',
@@ -358,7 +256,7 @@ export const HackathonHubView = ({ user }) => {
       org: 'Amrita Vishwa Vidyapeetham',
       location: 'Amrita Campus, Ettimadai, Coimbatore',
       category: 'Coimbatore Colleges',
-      prize: 'â‚¹5,00,000',
+      prize: '₹5,00,000',
       daysLeft: '25 Days Left',
       badge: 'Coimbatore Campus',
       tag: 'Robotics & Deep Tech',
@@ -370,7 +268,7 @@ export const HackathonHubView = ({ user }) => {
       org: 'Sri Ramakrishna Engineering College (SREC)',
       location: 'SREC Campus, Vattamalaipalayam, Coimbatore',
       category: 'Coimbatore Colleges',
-      prize: 'â‚¹1,00,000',
+      prize: '₹1,00,000',
       daysLeft: '20 Days Left',
       badge: 'Coimbatore Campus',
       tag: 'IoT & Clean Energy',
@@ -382,7 +280,7 @@ export const HackathonHubView = ({ user }) => {
       org: 'Government College of Technology (GCT)',
       location: 'GCT Campus, Thadagam Road, Coimbatore',
       category: 'Coimbatore Colleges',
-      prize: 'â‚¹1,20,000',
+      prize: '₹1,20,000',
       daysLeft: '10 Days Left',
       badge: 'Coimbatore Campus',
       tag: 'DSA & Open Source',
@@ -407,7 +305,7 @@ export const HackathonHubView = ({ user }) => {
       org: 'Govt. of India & Ministry of Education',
       location: 'India (National Nodal Centers)',
       category: 'National & SIH',
-      prize: 'â‚¹1,00,000',
+      prize: '₹1,00,000',
       daysLeft: '22 Days Left',
       badge: 'Govt of India',
       tag: 'National Problem Statements',
@@ -446,12 +344,12 @@ export const HackathonHubView = ({ user }) => {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12, marginBottom: 6 }}>
         <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', margin: 0 }}>ðŸ… Hackathon & Coding Contest Hub</h1>
+          <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', margin: 0 }}>Hackathon & Coding Contest Hub</h1>
           <p style={{ color: '#64748b', fontSize: 14, margin: '4px 0 0' }}>Coimbatore college hackathons, SIH, Google Solution Challenge & Microsoft Imagine Cup</p>
         </div>
         {registeredIds.length > 0 && (
           <div style={{ background: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 20, padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 13 }}>ðŸŽ‰</span>
+            <span style={{ fontSize: 13 }}>🎉</span>
             <span style={{ color: '#6ee7b7', fontSize: 12, fontWeight: 700 }}>{registeredIds.length} Team Registration{registeredIds.length > 1 ? 's' : ''} Confirmed</span>
           </div>
         )}
@@ -461,9 +359,9 @@ export const HackathonHubView = ({ user }) => {
       <div style={{ display: 'flex', gap: 8, margin: '20px 0', flexWrap: 'wrap' }}>
         {[
           { id: 'All', label: 'All Contests' },
-          { id: 'Coimbatore Colleges', label: 'Coimbatore Colleges ðŸ«' },
-          { id: 'National & SIH', label: 'National & SIH ðŸ‡®ðŸ‡³' },
-          { id: 'Global AI', label: 'Global AI & Tech ðŸŒ' }
+          { id: 'Coimbatore Colleges', label: 'Coimbatore Colleges' },
+          { id: 'National & SIH', label: 'National & SIH' },
+          { id: 'Global AI', label: 'Global AI & Tech' }
         ].map(f => {
           const active = selectedFilter === f.id;
           return (
@@ -511,7 +409,7 @@ export const HackathonHubView = ({ user }) => {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
                   <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, background: 'rgba(239,68,68,0.15)', color: '#fca5a5', fontWeight: 600 }}>
-                    ðŸ”¥ {h.daysLeft}
+                    🔥 {h.daysLeft}
                   </span>
                   <span style={{ fontSize: 10, padding: '2px 8px', borderRadius: 20, background: 'rgba(99,102,241,0.15)', color: '#a5b4fc', fontWeight: 600 }}>
                     {h.badge}
@@ -547,7 +445,7 @@ export const HackathonHubView = ({ user }) => {
                   fontSize: 12,
                   fontWeight: 700
                 }}>
-                  âœ“ Team Registered
+                  ✓ Team Registered
                 </span>
               ) : (
                 <button
@@ -568,7 +466,7 @@ export const HackathonHubView = ({ user }) => {
                     boxShadow: '0 4px 14px rgba(99,102,241,0.3)'
                   }}
                 >
-                  Register Now â†’
+                  Register Now →
                 </button>
               )}
             </div>
@@ -588,43 +486,3 @@ export const HackathonHubView = ({ user }) => {
   );
 };
 
-
-
-// --- FEATURE 23 & 24: Daily Challenge & Tech News ---
-export const DailyChallengeAndNewsView = () => (
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-    <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', marginBottom: 6 }}>ðŸ”¥ AI Daily Challenge & Tech News</h1>
-    <p style={{ color: '#64748b', fontSize: 14, marginBottom: 24 }}>Everyday coding challenge, quiz, resume task & real-time tech news feed</p>
-
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-      {/* Daily Challenge */}
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
-        <span style={{ fontSize: 11, color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase' }}>TODAY'S DAILY CHALLENGE</span>
-        <h3 style={{ color: '#fff', fontSize: 16, fontWeight: 700, marginTop: 4, marginBottom: 8 }}>Two Sum â€” Hash Map Optimization</h3>
-        <p style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.5, marginBottom: 12 }}>
-          Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to target.
-        </p>
-        <button style={{ padding: '8px 18px', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', border: 'none', borderRadius: 8, color: '#fff', fontWeight: 600, fontSize: 12, cursor: 'pointer' }}>
-          Solve Challenge â†’
-        </button>
-      </div>
-
-      {/* Tech News */}
-      <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 20 }}>
-        <span style={{ fontSize: 11, color: '#06b6d4', fontWeight: 700, textTransform: 'uppercase' }}>ðŸŒ LATEST TECH & AI NEWS</span>
-        <div style={{ display: 'grid', gap: 10, marginTop: 10 }}>
-          {[
-            { title: 'OpenAI releases new reasoning model API', time: '2 hours ago' },
-            { title: 'React 19 official release brings Server Actions to production', time: '5 hours ago' },
-            { title: 'Tech hiring spikes 24% for Full-Stack & AI engineers', time: '1 day ago' }
-          ].map((news, i) => (
-            <div key={i} style={{ borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.04)' : 'none', paddingBottom: 6 }}>
-              <div style={{ color: '#cbd5e1', fontSize: 13, fontWeight: 500 }}>{news.title}</div>
-              <div style={{ color: '#64748b', fontSize: 11, marginTop: 2 }}>{news.time}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </motion.div>
-);

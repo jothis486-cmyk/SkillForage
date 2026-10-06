@@ -10,7 +10,6 @@ import { Radar, Bar, Doughnut } from 'react-chartjs-2';
 
 import ProjectBuilder from '../components/ProjectBuilder';
 import ProjectDebugger from '../components/ProjectDebugger';
-import GitHubAnalyzer from '../components/GitHubAnalyzer';
 import JobMatcher from '../components/JobMatcher';
 import PlacementPrep from '../components/PlacementPrep';
 import LiveClassAssessment from '../components/LiveClassAssessment';
@@ -20,15 +19,11 @@ import ResumeExampleModal from '../components/ResumeExampleModal';
 import CodingWorkspaceModal from '../components/CodingWorkspaceModal';
 import JobApplicationModal from '../components/JobApplicationModal';
 import {
-  IndustrySkillTrackerView,
   AIMentorView,
   FreelancingReadinessView,
   InterviewExperienceHubView,
   CertificateVerificationView,
-  SalaryPredictorView,
-  TeamCollaborationView,
   HackathonHubView,
-  DailyChallengeAndNewsView
 } from '../components/FeatureHubs';
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend, CategoryScale, LinearScale, BarElement, ArcElement);
@@ -45,14 +40,9 @@ const SIDEBAR_ITEMS = [
   { icon: '🎤', label: 'AI Mock Interview', id: 'ai-interview' },
   { icon: '💼', label: 'Job Recommendations', id: 'jobs' },
   { icon: '🏆', label: 'Certificates', id: 'certifications' },
-  { icon: '👥', label: 'Community', id: 'team-collaboration' },
   { icon: '🤖', label: 'AI Mentor', id: 'ai-mentor' },
-  { icon: '📊', label: 'Industry Skill Tracker', id: 'skill-tracker' },
   { icon: '📅', label: 'Placement Planner', id: 'placement-planner' },
-  { icon: '💰', label: 'Salary Predictor', id: 'salary-predictor' },
   { icon: '🏅', label: 'Hackathons & Contests', id: 'hackathons' },
-  { icon: '🔥', label: 'Daily Challenge & News', id: 'daily-challenge' },
-  { icon: '📂', label: 'GitHub Analyzer', id: 'github-analyzer' },
   { icon: '📄', label: 'Resume vs Job Match', id: 'job-match' },
   { icon: '👨‍💻', label: 'Debug & Fix Code', id: 'project-debugger' },
   { icon: '👤', label: 'Profile', id: 'profile' },
@@ -210,19 +200,13 @@ const Dashboard = () => {
     switch (activeTab) {
       case 'project-builder': return <ProjectBuilder />;
       case 'project-debugger': return <ProjectDebugger />;
-      case 'github-analyzer': return <GitHubAnalyzer />;
       case 'job-match': return <JobMatcher />;
-      case 'skill-tracker': return <IndustrySkillTrackerView />;
       case 'placement-planner': return <PlacementPrep />;
       case 'ai-mentor': return <AIMentorView />;
       case 'freelancing': return <FreelancingReadinessView />;
       case 'interview-experiences': return <InterviewExperienceHubView />;
       case 'certifications': return <CertificateVerificationView />;
-      case 'salary-predictor': return <SalaryPredictorView />;
-      case 'team-collaboration': return <TeamCollaborationView />;
       case 'hackathons': return <HackathonHubView />;
-
-      case 'daily-challenge': return <DailyChallengeAndNewsView />;
       case 'ai-interview': return <AIInterviewSystem />;
       case 'live-class-assessment': return <LiveClassAssessment />;
 

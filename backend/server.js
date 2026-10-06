@@ -145,10 +145,23 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
-// Root route
-app.get('/', (req, res) => {
-  res.send('AI Skill Gap Detection API is running...');
-});
+// ─── Serve Frontend Static Files ─────────────────────────────────────────────
+const frontendDist = path.join(__dirname, '../frontend/dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  // Catch-all: serve index.html for any non-API route (client-side routing)
+  app.get('/{*path}', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads') || req.path === '/health') {
+      return next();
+    }
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+} else {
+  // Root route fallback when no frontend build exists
+  app.get('/', (req, res) => {
+    res.send('AI Skill Gap Detection API is running...');
+  });
+}
 
 // ─── Global Error Handler ─────────────────────────────────────────────────────
 app.use((err, req, res, next) => {
